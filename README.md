@@ -1,3 +1,5 @@
+<img src="resources/HLSL.png" width="128">
+
 # Ecma TC57 - The HLSL Standard Committee
 
 This repository documents and tracks the specification and evolution process for
