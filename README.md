@@ -8,6 +8,10 @@ process and solicit feedback from the wider community.
 To understand the processes used by the Technical Committee please review our
 [process documentation](/docs/Process.md).
 
+The draft HLSL specification is available in
+[HTML](https://hlsl-tc57.github.io/tc57/spec/index.html) and
+[PDF](https://hlsl-tc57.github.io/tc57/spec/hlsl.pdf).
+
 ## Building the Specification
 
 The text for the HLSL specification is under the [`spec`](/spec/) directory. It
