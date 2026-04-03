@@ -17,7 +17,7 @@ to at least making a best effort to navigate the process as described below.
 
 If you want to request a feature but not get involved in the process, the best
 way to request features for HLSL is to [file GitHub
-issues](https://github.com/llvm-beanz/tc/issues/new?template=feature_request.md)
+issues](https://github.com/hlsl-tc57/tc/issues/new?template=feature_request.md)
 rather than creating pull requests against this repository.
 
 This process draws heavily from

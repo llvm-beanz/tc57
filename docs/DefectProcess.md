@@ -14,7 +14,7 @@ should follow the [proposal process](ProposalProcess.md).
 
 TC57 tracks defects using GitHub Issues. New defects may be filed with the
 [defect
-template](https://github.com/llvm-beanz/tc/issues/new?template=defect.md) on
+template](https://github.com/hlsl-tc57/tc/issues/new?template=defect.md) on
 this repository. When filing a defect report please include all relevant
 context.
 
