@@ -247,14 +247,14 @@ There are no observed instances of the change in floating point behavior causing
 disruption. If such cases exist the existing `-Wconversion` diagnostics will
 sufficiently notify users of implicit conversions that result in precision loss.
 
-The change in integer behavior inc more important. The behavior of bit shifts in
+The change in integer behavior is more important. The behavior of bit shifts in
 HLSL has historically changed independent of language version, and ambiguity of
 bit shifts on literal operands does produce a compiler diagnostic (see:
 [dxc/#300](https://github.com/microsoft/DirectXShaderCompiler/pull/3400)).
 
 This proposal will introduce a new diagnostic for 32-bit literal integers values
 that will become `unsigned` with this proposal. This diagnostic will be under
-the `-Wfuture-compatability` diagnostic group.
+the `-Wfuture-compatibility` diagnostic group.
 
 This proposal will also add a new diagnostic for calls to `asfloat16` with
 floating point arguments to notify users that they should use a cast instead.
