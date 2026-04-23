@@ -1,4 +1,4 @@
-baseURL = 'https://llvm-beanz.github.io/tc57'
+baseURL = 'https://hlsl-tc57.github.io/tc57'
 languageCode = 'en-us'
 title = 'Ecma TC57 - HLSL'
 theme = 'hugo-theme-techdoc'
@@ -7,7 +7,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
 
 [params]
   menu_style = "slide-menu"
-  github_doc_repository = "https://github.com/llvm-beanz/tc57"
+  github_doc_repository = "https://github.com/hlsl-tc57/tc57"
   github_doc_repository_branch = "main"
   github_doc_repository_path = ""
 
