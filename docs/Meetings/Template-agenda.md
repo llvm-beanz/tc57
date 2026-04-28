@@ -5,7 +5,7 @@ draft: true
 
 |                 |                                                                    |
 |:----------------|:-------------------------------------------------------------------|
-| Agenda for the: | [\[N\]th meeting of Ecma TC57]()                                   |
+| Agenda for the: | \[N\]th meeting of Ecma TC57                                       |
 | held in:        | Google Meet/Microsoft Teams/Zoom \[PICK ONE\] (virtual)            |
 | on:             | dd MMM yyyy                                                        |
 
