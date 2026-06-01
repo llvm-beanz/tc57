@@ -363,63 +363,31 @@ composition of the sequence are defined in Chapter \ref{Conv}.
 
 Each standard conversion is given a category and rank as defined in the table
 below:
-\begin{center}
-  \begin{tabular}{|| c | c | c | c ||}
-    \hline
-    Conversion & Category & Rank & Reference \\
-    \hline
-    No conversion & Identity &  & \\ \cline{1-2}\cline{4-4}
 
-    Lvalue-to-rvalue & & & \ref{Conv.lval} \\ \cline{4-4}
-    Array-to-pointer & Lvalue Transformation & Exact Match
-          & \ref{Conv.array} \\ \cline{1-2}\cline{4-4}
-    Qualification & Qualification Adjustment & & \ref{Conv.qual} \\ \cline{1-4}
-
-    Vector Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
-      & \ref{Conv.vsplat} \\ \cline{1-4}
-
-    Matrix Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
-          & \ref{Conv.msplat} \\ \cline{1-4}
-
-    Integral promotion & &
-          & \ref{Conv.iconv} \& \ref{Conv.rank.int} \\ \cline{1-1}\cline{4-4}
-    Floating point promotion & Promotion & Promotion
-          & \ref{Conv.fconv} \& \ref{Conv.rank.float} \\ \cline{1-1}\cline{4-4}
-    Component-wise promotion &  &  & \ref{Conv.cwise} \\ \cline{1-4}
-
-    Scalar splat promotion & Scalar Extension Promotion & Promotion Extension
-          & \ref{Conv.vsplat} \\ \cline{1-4}
-
-    Integral conversion & & & \ref{Conv.iconv} \\ \cline{1-1}\cline{4-4}
-    Floating point conversion &  &  & \ref{Conv.fconv} \\ \cline{1-1}\cline{4-4}
-    Floating-integral conversion & Conversion & Conversion
-          & \ref{Conv.fpint} \\ \cline{1-1}\cline{4-4}
-    Boolean conversion &  &  & \ref{Conv.bool} \\ \cline{1-1}\cline{4-4}
-    Component-wise conversion &  &  & \ref{Conv.cwise} \\ \cline{1-4}
-
-    Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
-          & \ref{Conv.vsplat} \\ \cline{1-4}
-
-    Vector truncation (without conversion) & Dimensionality Reduction
-          & Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-
-    Vector truncation promotion & Dimensionality Reduction Promotion
-          & Promotion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-
-    Vector truncation conversion & Dimensionality Reduction Conversion
-          & Conversion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-
-    Matrix truncation (without conversion) & Dimensionality Reduction
-          & Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-
-    Matrix truncation promotion & Dimensionality Reduction Promotion
-          & Promotion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-
-    Matrix truncation conversion & Dimensionality Reduction Conversion
-          & Conversion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
-    \hline
-  \end{tabular}
-\end{center}
+| Conversion | Category | Rank | Reference |
+|------------|----------|------|-----------|
+| No conversion | Identity | Exact Match | |
+| Lvalue-to-rvalue | Lvalue Transformation | Exact Match | \ref{Conv.lval} |
+| Array-to-pointer | Lvalue Transformation | Exact Match | \ref{Conv.array} |
+| Qualification | Qualification Adjustment | Exact Match | \ref{Conv.qual} |
+| Vector Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
+| Matrix Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.msplat} |
+| Integral promotion | Promotion | Promotion | \ref{Conv.iconv} & \ref{Conv.rank.int} |
+| Floating point promotion | Promotion | Promotion | \ref{Conv.fconv} & \ref{Conv.rank.float} |
+| Component-wise promotion | Promotion | Promotion | \ref{Conv.cwise} |
+| Scalar splat promotion | Scalar Extension Promotion | Promotion Extension | \ref{Conv.vsplat} |
+| Integral conversion | Conversion | Conversion | \ref{Conv.iconv} |
+| Floating point conversion | Convesrion | Conversion | \ref{Conv.fconv} |
+| Floating-integral conversion | Conversion | Conversion | \ref{Conv.fpint} |
+| Boolean conversion | Convesrion | Conversion | \ref{Conv.bool} |
+| Component-wise conversion | Conversion | Conversion | \ref{Conv.cwise} |
+| Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
+| Vector truncation (without conversion) | Dimensionality Reduction | Truncation | \ref{Conv.vtrunc} |
+| Vector truncation promotion | Dimensionality Reduction Promotion | Promotion Truncation | \ref{Conv.vtrunc} |
+| Vector truncation conversion | Dimensionality Reduction Conversion | Conversion Truncation | \ref{Conv.vtrunc} |
+| Matrix truncation (without conversion) | Dimensionality Reduction | Truncation | \ref{Conv.vtrunc} |
+| Matrix truncation promotion | Dimensionality Reduction Promotion | Promotion Truncation | \ref{Conv.vtrunc} |
+| Matrix truncation conversion | Dimensionality Reduction Conversion | Conversion Truncation | \ref{Conv.vtrunc} |
 
 If a scalar splat conversion occurs in a conversion sequence where all other
 conversions are **Exact Match** rank, the conversion is ranked as
