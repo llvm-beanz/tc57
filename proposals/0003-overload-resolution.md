@@ -118,3 +118,367 @@ non-ambiguous cases.
 This proposal adopts a modified overload resolution algorithm from C++ which is
 updated to account for the new conversions and conversion ranks defined in the
 [implicit conversions](#implicit-conversions) section of this document.
+
+## Detailed Design
+
+### Overloading `[Overload]`
+
+When a single name is declared with two or more different declarations in the
+same scope, the name is _overloaded_. A declaration that declares an
+overloaded name is called an _overloaded declaration_. The set of
+overloaded declarations that declare the same overloaded name are that name's
+_overload set_.
+
+Only function and template declarations can be overloaded; variable and type
+declarations cannot be overloaded.
+
+#### Overloadable Declarations `[Overload.Decl]`
+
+This section specifies the cases in which a function declaration cannot be
+overloaded. Any program that contains an invalid overload set is ill-formed.
+
+ In overload set is invalid if:
+  * One or more declaration in the overload set only differ by return type.
+
+```hlsl
+int Yeet();
+uint Yeet(); // ill-formed: decls differ only by return type
+```
+  * An overload set contains more than one member function declarations with
+  the same _parameter-type-list_, and one of those declarations is a
+  `static` member function declaration (\ref{Classes.Static}).
+```hlsl
+class Doggo {
+  static void pet();
+  void pet();              // ill-formed: static pet has the same parameter-type-list
+  void pet() const;        // ill-formed: static pet has the same parameter-type-list
+
+  void wagTail();          // valid: no conflicting static declaration.
+  void wagTail() const;    // valid: no conflicting static declaration.
+
+  static void bark(Doggo D);
+  void bark();             // valid: static bark parameter-type-list is different
+  void bark() const;       // valid: static bark parameter-type-list is different
+};
+```
+
+  * An overload set contains more than one entry function declaration (\ref{Decl.Attr.Entry}).
+```hlsl
+[shader("vertex")]
+void VS();
+void VS(int);              // valid: only one entry point.
+
+[shader("vertex")]
+void Entry();
+
+[shader("compute")]
+void Entry(int);           // ill-formed: an overload set cannot have more than one entry function
+```
+
+  * An overload set contains more than one function declaration which only
+  differ in parameter declarations of equivalent types.
+```hlsl
+void F(int4 I);
+void F(vector<int, 4> I);  // ill-formed: int4 is a type alias of vector<int, 4>
+```
+
+  * An overload set contains more than one function declaration which only
+  differ in `const` specifiers.
+```hlsl
+void G(int);
+void G(const int);         // ill-formed: redeclaration of G(int)
+void G(int) {}
+void G(const int) {}       // ill-formed: redefinition of G(int)
+```
+
+  * An overload set contains more than one function declaration which only
+  differ in parameters mismatching `out` and `inout`.
+```hlsl
+void H(int);
+void H(in int);            // valid: redeclaration of H(int)
+void H(inout int);         // valid: overloading between in and inout is allowed
+
+void I(in int);
+void I(out int);           // valid: overloading between in and out is allowed
+
+void J(out int);
+void J(inout int);         // ill-formed: Cannot overload based on out/inout mismatch
+```
+
+#### Overload Resolution `[Overload.Res]`
+
+_Overload resolution_ is process by which a function call is mapped to
+a the best overloaded function declaration. Overload resolution uses set of
+functions called the _candidate set_, and a list of expressions that
+comprise the argument list for the call.
+
+Overload resolution selects the function to call in the following
+contexts\footnote{DXC only supports overload resolution for function calls and
+invocation of operators during expressions. Clang will support all contexts
+listed.}:
+
+  * invocation of a function named in a function call expression;
+  * invocation of a function call operator on a class object named in
+  function call syntax;
+  * invocation of the operator referenced in an expression;
+  * invocation of a user-defined conversion for copy-initialization of a
+  class object;
+  * invocation of a conversion function for initialization of an object of a
+  nonclass type from an expression of class type.
+
+In each of these contexts a unique method is used to construct the overload
+candidate set and argument expression list.
+
+##### Candidate Functions and Argument Lists `[Overload.Res.Sets]`
+
+> \gls{isoCPP} goes into a lot of detail in this section about how candidate
+> functions and argument lists are selected for each context where overload
+> resolution is performed. HLSL matches C++ for the contexts that HLSL inherits.
+> For now, this section will be left as a stub, but HLSL inherits the following
+> sections from C++:
+>
+> * **[over.call.func]**
+> * **[over.call.object]**
+> * **[over.match.oper]**
+> * **[over.match.copy]**
+> * **[over.match.conv]**
+
+##### Viable Functions `[Overload.Res.Viable]`
+
+Given the candidate set and argument expressions as determined by the
+relevant context (\ref{Overload.Res.Sets}), a subset of viable functions can be
+selected from the candidate set.
+
+A function candidate $F(P_0 ... P_m)$ is not a viable function for a call
+with argument list $A_0 ... A_n$ if:
+
+* The function has fewer parameters than there are
+  arguments in the argument list ($m < n$).
+* The function has more parameters than there are arguments to the
+  argument list ($m > n$), and function parameters $ P_{n+1} ... P_m $ do not
+  all have default arguments.
+* There is not an implicit conversion sequence that converts each argument
+  $A_i$ to the type of the corresponding parameter $P_i$.
+
+##### Best Viable Function `[Overload.Res.Best]`
+
+For an overloaded call with arguments $A_0 ... A_n$, each viable function
+$F(P_0 ... P_m)$, has a set of implicit conversion sequences $ICS_0(F) ... ICS_m(F)$
+defining the conversion sequences for each argument $A_i$ to the
+type of parameter $P_i$.
+
+A viable function $F$ is defined to be a better function than another
+viable function $f\`$ if for all arguments $ICS_i(F)$ is not a worse
+conversion sequence than $ICS_i(f\`)$, and:
+
+* for some argument $j$, $ICS_j(F)$ is a better conversion than
+  $ICS_j(f\`)$ or,
+* in the context of an initialization by user-defined conversion, the
+  conversion sequence from the return type of $F$ to the destination type is a
+  better conversion sequence than the return type of $f\`$ to the destination
+  type or,
+* $F$ is a non-template function and $f\`$ is a function template
+  specialization, or
+* $F$ and $f\`$ are both function template specializations and $F$ is
+  more specialized than $f\`$ according to function template partial ordering
+  rules (\ref{Template.Func.Order}).
+
+If there is one viable function that is a better function than all the other
+viable functions, it is the selected function; otherwise the call is ill-formed.
+
+If the resolved overload is a function with multiple declarations, and if at
+least two of these declarations specify a default argument that made the
+function viable, the program is ill-formed.
+
+```hlsl
+void F(int X = 1);
+void F(float Y = 2.0f);
+
+void Fn() {
+  F(1);     // Okay.
+  F(3.0f);  // Okay.
+  F();      // Ill-formed.
+}
+```
+
+##### Implicit Conversion Sequences `[Overload.ICS]`
+
+An _implicit conversion sequence_ is a sequence of conversions which
+converts a source value to a prvalue of destination type. In overload resolution
+the source value is the argument expression in a function call, and the
+destination type is the type of the corresponding parameter of the function
+being called.
+
+When a parameter is a cxvalue an _inverted implicit conversion sequence_ is
+required to convert the parameter type back to the argument type
+for writing back to the argument expression lvalue. An inverted implicit
+conversion sequence must be a well-formed implicit conversion sequence where the
+source value is the implicit cxvalue of the parameter type, and the destination
+type is the argument expression's lvalue type.
+
+A well-formed implicit conversion sequence is either a _standard conversion
+sequence_, or a _user-defined conversion sequence_.
+
+In the following contexts an implicit conversion sequence can only be a
+standard conversion sequence:
+
+  * Argument conversion for a user-defined conversion function.
+  * Copying a temporary for class copy-initialization.
+  * When passing an initializer-list as a single argument.
+  * Copy-initialization of a class by user-defined conversion.
+
+An implicit conversion sequence models a copy-initialization unless it is an
+inverted implicit conversion sequence when it models an assignment. Any
+difference in top-level cv-qualification is handled by the copy-initialization
+or assignment, and does not constitute a conversion\footnote{"Top-level"
+cv-qualification refers to the qualification of the value. This means an
+parameter of type `T` can be initialized by a argument of type
+`const T`. This does not mean that a parameter of type `inout T`
+can be initialized with a argument of type `const T` because there is no
+valid inverted conversion system to assign back to a value of type `const T`.}.
+
+When the source value type and the destination type are the same, the
+implicit conversion sequence is an _identity conversion_, which signifies
+no conversion.
+
+Only standard conversion sequences that do not create temporary objects are
+valid for implicit object parameters or left operand to assignment operators.
+
+If no sequence of conversions can be found to convert a source value to the
+destination type, an implicit conversion sequence cannot be formed.
+
+If several different sequences of conversions exist that convert the source
+value to the destination type, the implicit conversion sequence is defined to be
+the unique conversion sequence designated the _ambiguous conversion sequence_.
+For the purpose of ranking implicit conversion sequences, the
+ambiguous conversion sequence is treated as a user-defined sequence that is
+indistinguishable from any other user-defined conversion sequence. If overload
+resolution selects a function using the ambiguous conversion sequence as the
+best match for a call, the call is ill-formed.
+
+**Standard Conversion Sequences `[Overload.ICS.SCS]`**
+
+The conversions that comprise a standard conversion sequence and the
+composition of the sequence are defined in Chapter \ref{Conv}.
+
+Each standard conversion is given a category and rank as defined in the table
+below:
+\begin{center}
+  \begin{tabular}{|| c | c | c | c ||}
+    \hline
+    Conversion & Category & Rank & Reference \\
+    \hline
+    No conversion & Identity &  & \\ \cline{1-2}\cline{4-4}
+
+    Lvalue-to-rvalue & & & \ref{Conv.lval} \\ \cline{4-4}
+    Array-to-pointer & Lvalue Transformation & Exact Match
+          & \ref{Conv.array} \\ \cline{1-2}\cline{4-4}
+    Qualification & Qualification Adjustment & & \ref{Conv.qual} \\ \cline{1-4}
+
+    Vector Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
+      & \ref{Conv.vsplat} \\ \cline{1-4}
+
+    Matrix Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
+          & \ref{Conv.msplat} \\ \cline{1-4}
+
+    Integral promotion & &
+          & \ref{Conv.iconv} \& \ref{Conv.rank.int} \\ \cline{1-1}\cline{4-4}
+    Floating point promotion & Promotion & Promotion
+          & \ref{Conv.fconv} \& \ref{Conv.rank.float} \\ \cline{1-1}\cline{4-4}
+    Component-wise promotion &  &  & \ref{Conv.cwise} \\ \cline{1-4}
+
+    Scalar splat promotion & Scalar Extension Promotion & Promotion Extension
+          & \ref{Conv.vsplat} \\ \cline{1-4}
+
+    Integral conversion & & & \ref{Conv.iconv} \\ \cline{1-1}\cline{4-4}
+    Floating point conversion &  &  & \ref{Conv.fconv} \\ \cline{1-1}\cline{4-4}
+    Floating-integral conversion & Conversion & Conversion
+          & \ref{Conv.fpint} \\ \cline{1-1}\cline{4-4}
+    Boolean conversion &  &  & \ref{Conv.bool} \\ \cline{1-1}\cline{4-4}
+    Component-wise conversion &  &  & \ref{Conv.cwise} \\ \cline{1-4}
+
+    Scalar splat conversion & Scalar Extension Conversion & Conversion Extension
+          & \ref{Conv.vsplat} \\ \cline{1-4}
+
+    Vector truncation (without conversion) & Dimensionality Reduction
+          & Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+
+    Vector truncation promotion & Dimensionality Reduction Promotion
+          & Promotion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+
+    Vector truncation conversion & Dimensionality Reduction Conversion
+          & Conversion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+
+    Matrix truncation (without conversion) & Dimensionality Reduction
+          & Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+
+    Matrix truncation promotion & Dimensionality Reduction Promotion
+          & Promotion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+
+    Matrix truncation conversion & Dimensionality Reduction Conversion
+          & Conversion Truncation & \ref{Conv.vtrunc} \\ \cline{1-4}
+    \hline
+  \end{tabular}
+\end{center}
+
+If a scalar splat conversion occurs in a conversion sequence where all other
+conversions are **Exact Match** rank, the conversion is ranked as
+**Extension**. If a scalar splat occurs in a conversion
+sequence with a **Promotion** conversion, the conversion is ranked as
+**Promotion Extension**. If a scalar splat occurs in a conversion
+sequence with a **Conversion** conversion, the conversion is ranked as
+**Conversion Extension**.
+
+If a vector truncation conversion occurs in a conversion sequence where all
+other conversions are **Exact Match** rank, the conversion is ranked as
+**Truncation**. If a vector truncation occurs in a conversion
+sequence with a **Promotion** conversion, the conversion is ranked as
+**Promotion Truncation**. If a vector truncation occurs in a conversion
+sequence with a **Conversion** conversion, the conversion is ranked as
+**Conversion Truncation**.
+
+Otherwise, the rank of a conversion sequence is determined by considering the
+rank of each conversion.
+
+ Conversion sequence ranks are ordered from better to worse as:
+
+  * **Exact Match**
+  * **Extension**
+  * **Promotion**
+  * **Promotion Extension**
+  * **Conversion**
+  * **Conversion Extension**
+  * **Truncation**
+  * **Promotion Truncation**
+  * **Conversion Truncation**
+
+**Comparing Implicit Conversion Sequences `[Overload.ICS.Comparing]`**
+
+A partial ordering of implicit conversion sequences exists based on defining
+relationships for _better conversion sequence_, and _better conversion_. If an
+implicit conversion sequence $ICS(f)$ is a better conversion sequence than
+$ICS(f\`)$, then the inverse is also true: $ICS(f\`)$ is a _worse conversion
+sequence_ than $ICS(f)$. If $ICS(f)$ is neither better nor worse than
+$ICS(f\`)$, the conversion sequences are _indistinguishable conversion
+sequences_.
+
+A standard conversion sequence is always better than a user-defined conversion
+sequence.
+
+Standard conversion sequences are ordered by their ranks. Two conversion
+sequences with the same rank are indistinguishable unless one of the following
+rules applies:
+
+  * If class `B` is derived directly or indirectly from class
+  `A` and class `C` is derived directly or indirectly from class
+  `B`,
+    * binding of a expression of type `C` to a cxvalue of type
+    `B` is better than binding an expression of type `C` to a
+    cxvalue of type `A`,
+    * conversion of `C` to `B` is better than conversion or
+    `C` to `A`,
+    * binding of a expression of type `B` to a cxvalue of type
+    `A` is better than binding an expression of type `C` to a
+    cxvalue of type `A`,
+    * conversion of `B` to `A` is better than conversion of
+    `C` to `A`.
