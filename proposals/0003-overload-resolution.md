@@ -137,7 +137,7 @@ declarations cannot be overloaded.
 This section specifies the cases in which a function declaration cannot be
 overloaded. Any program that contains an invalid overload set is ill-formed.
 
- In overload set is invalid if:
+An overload set is invalid if:
   * One or more declaration in the overload set only differ by return type.
 
 ```hlsl
@@ -205,6 +205,13 @@ void J(out int);
 void J(inout int);         // ill-formed: Cannot overload based on out/inout mismatch
 ```
 
+#### Declaration Matching `[Overload.Match]`
+
+Two function declarations with the same name and same parameter lists refer to
+the same function if they are in the same scope (\ref{Basic.Scope}). A function
+declaration in a containing scope is not the same as a function of the same
+name and parameter list in a contained scope.
+
 #### Overload Resolution `[Overload.Res]`
 
 _Overload resolution_ is process by which a function call is mapped to
@@ -231,17 +238,40 @@ candidate set and argument expression list.
 
 ##### Candidate Functions and Argument Lists `[Overload.Res.Sets]`
 
-> \gls{isoCPP} goes into a lot of detail in this section about how candidate
-> functions and argument lists are selected for each context where overload
-> resolution is performed. HLSL matches C++ for the contexts that HLSL inherits.
-> For now, this section will be left as a stub, but HLSL inherits the following
-> sections from C++:
->
-> * **[over.call.func]**
-> * **[over.call.object]**
-> * **[over.match.oper]**
-> * **[over.match.copy]**
-> * **[over.match.conv]**
+At each point where an overload must be resolved an implementation will generate
+a _candidate set_, containing all possible candidate functions, and the argument
+list for the overloaded call. The subclauses under \ref(Overload.Res.Sets)
+define the process by which the candidate set and argument lists are constructed
+in each context where overload resolution occurs.
+
+A candidate set may include both member and non-member functions to be resolved
+against the same argument set. Member functions have an extra _implicit object
+parameter_, representing the object the function is called on. For the purposes
+of overload resolution a static member function is considered to have an
+implicit object parameter.
+
+When appropriate the context shall construct an _implied object argument_
+referring to the object operated on.
+
+The implicit object parameter and implied object argument if present are always
+the first parameter or argument.
+
+The type of the implicit object parameter is: lvalue reference `cv T`; where `T`
+is the class containing the declaration of the function, and `cv` is the
+_cv-qualification_ on the function declaration.
+
+Implied object arguments behave the same as any explicit argument, no temporary
+object shall be created to hold the argument for the implicit object parameter
+except when the implicit object parameter is a member of a
+_cbuffer-declaration_.
+
+If a candidate is a function template, candidate specializations are generated
+through template argument deduction (\ref{Template.Deduction}), candidates are
+then handled as any other candidate. A name may refer to more than one function
+template, in which case candidate functions shall be generated for each function
+template to form the full candidate set.
+
+> TODO: @llvm-beanz to continue fleshing this out...
 
 ##### Viable Functions `[Overload.Res.Viable]`
 
