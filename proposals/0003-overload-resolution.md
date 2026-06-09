@@ -226,10 +226,6 @@ contexts:
   * invocation of a function call operator on a class object named in
   function call syntax;
   * invocation of the operator referenced in an expression;
-  * invocation of a user-defined conversion for copy-initialization of a
-  class object;
-  * invocation of a conversion function for initialization of an object of a
-  nonclass type from an expression of class type.
 
 In each of these contexts a unique method is used to construct the overload
 candidate set and argument expression list.
@@ -269,7 +265,81 @@ then handled as any other candidate. A name may refer to more than one function
 template, in which case candidate functions shall be generated for each function
 template to form the full candidate set.
 
-> TODO: @llvm-beanz to continue fleshing this out...
+**Function Call Syntax `[Overload.Res.Call]`**
+
+```
+postfix-expression ( \opt{expression-list} )
+```
+
+In a function call (\ref{Expr.Post.Call}), if the _postfix-expression_ names a
+candidate set comprised of overloaded functions and/or function templates, the
+overload resolves as to a named function (\ref{Overload.Res.Call.Named}). If the
+_postfix-expression_ names an object of class type the overload is resolved as a
+call to an object of class type (\ref{Overload.Res.Call.Object}).
+
+_Call to a Named Function `[Overload.Res.Call.Named]`_
+
+In a call to a named function, the _postfix-expression_ must be one of the
+forms:
+
+```
+postfix-expression:
+  postfix-expression . id-expression
+  primary-expression
+```
+
+In the first grammar production the _id-expression_ is the name of the function
+to be called, and the _postfix-expression_ preceeding the `.` operator. This
+formation represents a _qualified_ function call, where the _postfix-expression_
+must be an object of class type, and the call is looked up as a member function
+of that object. The function names found by that lookup constitute the overload
+candidate set for the call. The argument list for the call is the
+_expression-list_ in the call with the left operand of the `.` operator
+prepended as the implicit object parameter (\ref{Overload.Res.Sets}).
+
+In the second grammar production the name is not qualified by an object
+parameter, so it is an unqualified call. Name lookup occurs as normal for name
+lookup of a function call (\ref{Basic.Lookup}), function declarations found
+constitute the candidate set. The candidate set for an unqualified call will be
+comprised either entirely of non-member functions or entirely of member
+functions of some class `T`. If the candidate set is entirely non-member
+functions, the argument list is the _expression-list_. If the candidate set is
+entirely member functions of class `T`, the argument list is the
+_expression-list_ with an implied object argument prepended. If the call
+expression occurs in a context where an implicit object `this` is in scope and
+of class type `T` or a type `T\``, the `this` object will be the implicit object
+argument, otherwise a contrived argument of type `T` will become the implied
+object argument. If overload resolution selects a non-static member function,
+and the implicit object argument is a contrived argument, the call is
+ill-formed.
+
+_Call to a Object of Class Type `[Overload.Res.Call.Object]`_
+
+If the _primary-expression_ in the function call expression is a class object of
+type `T`, then the set of candidate functions will include the call operators of
+`T` obtained by name lookup of the name `operator()` (\ref{Basic.Lookup}).
+
+For this formulation the argument list consists of the _expression-list_ from
+the call syntax with the implicit object argument prefixed. The implicit object
+argument in this form is the object produced from the evaluated
+_postfix-expression_.
+
+**Operators in Expressions `[Overload.Res.Oper]`**
+
+Operators in an expression where no operands have a class or enumeration type
+are assumed to be built-in operators and interpreted following \ref{Expr}.
+
+If either operand is of class or enumeration type, overload resolution
+determines which operator function or built-in operator is resolved for the
+expression. For operator expressions for an operator `@` are resolved as if
+transformed to function call notation following the pattern:
+
+| Expression | Member function   |
+| @a         | (a).operator@()   |
+| a@b        | (a).operator@(b)  |
+| a[b]       | (a).operator[](b) |
+
+> TODO: for @llvm-beanz to continue from here...
 
 ##### Viable Functions `[Overload.Res.Viable]`
 
