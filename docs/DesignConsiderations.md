@@ -71,6 +71,12 @@ HLSL exists to serve users. Consider the experience of users and all the ways
 HLSL can empower them to be more productive and creative. HLSL inherits a lot of
 sharp edges both from its history and from C++; we strive to reduce those cases.
 
+### Viability of implementation matters
+
+A specification with no conforming implementations is not useful. We will not
+standardize language features that cannot be feasibly implemented in a
+conforming implementation.
+
 ## Style Conventions
 
 HLSL's built-in types and methods should conform to a consistent coding style.
