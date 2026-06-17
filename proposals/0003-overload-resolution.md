@@ -678,12 +678,24 @@ subscript syntax when the _postfix-expression_ is an object of class type.
 
 #### Built-in Operators `[Overload.Builtin]`
 
-// arithmetic
+For binary operators on arithmetic types, the result type is called the
+_promoted expression type_ as determined by usual arithmetic conversions
+(\ref{Expr.Conv}).
+
+For all types `T` where `T` is an arithmetic type (\ref{Basic.Types.Arithmetic});
+operators will be defined of the forms:
+
+```
 T operator+(T );
 T operator-(T );
 T operator~(T );
+```
 
-// arithmetic
+For all types `L`, `R` and `LR`, where `L` and `R` are any arithmetic type
+(\ref{Basic.Types.Arithmetic}), and `LR` is the promoted expression type;
+operators will be defined of the forms:
+
+```
 LR operator*(L , R );
 LR operator/(L , R );
 LR operator+(L , R );
@@ -695,42 +707,73 @@ bool operator>=(L , R );
 bool operator==(L , R );
 bool operator!=(L , R );
 LR operator%(L , R );
+```
 
-// enumeration
+For all types `T` where `T` is an enumeration type (\ref{Decl.Enum}); operators
+will be defined of the form:
+
+```
 bool operator<(T , T );
 bool operator>(T , T );
 bool operator<=(T , T );
 bool operator>=(T , T );
 bool operator==(T , T );
 bool operator!=(T , T );
+```
 
-// integral
+For all types `T` where `T` is an integral type
+(\ref{Basic.Types.Arithmetic}); operators will be defined of the form:
+
+```
 LR operator&(L , R );
 LR operator^(L , R );
 LR operator|(L , R );
 L operator<<(L , R );
 L operator>>(L , R );
+```
 
-// arithmetic
-VQ L & operator=(VQ L &, R );
-VQ L & operator*=(VQ L &, R );
-VQ L & operator/=(VQ L &, R );
-VQ L & operator+=(VQ L &, R );
-VQ L & operator-=(VQ L &, R );
-VQ L & operator%=(VQ L &, R );
+For all types `L` and `R` where `L` and `R` are arithmetic types
+(\ref{Basic.Types.Arithmetic}), and `CVQ` is a _cv-qualifier_; operators will be
+defined of the form:
 
-// integral
-VQ L & operator<<=(VQ L &, R );
-VQ L & operator>>=(VQ L &, R );
-VQ L & operator&=(VQ L &, R );
-VQ L & operator^=(VQ L &, R );
-VQ L & operator|=(VQ L &, R );
+```
+CVQ L & operator=(CVQ L &, R );
+CVQ L & operator*=(CVQ L &, R );
+CVQ L & operator/=(CVQ L &, R );
+CVQ L & operator+=(CVQ L &, R );
+CVQ L & operator-=(CVQ L &, R );
+CVQ L & operator%=(CVQ L &, R );
+```
 
+For all types `L` and `R` where `L` and `R` are integral types
+(\ref{Basic.Types.Arithmetic}), and `CVQ` is a _cv-qualifier_; operators will be
+defined of the form:
+```
+CVQ L & operator<<=(CVQ L &, R );
+CVQ L & operator>>=(CVQ L &, R );
+CVQ L & operator&=(CVQ L &, R );
+CVQ L & operator^=(CVQ L &, R );
+CVQ L & operator|=(CVQ L &, R );
+```
+
+For the boolean type `bool` operators will be defined of the form:
+
+```
 bool operator!(bool);
 bool operator&&(bool, bool);
 bool operator||(bool, bool);
+```
 
-// arithmetic
+For all types `L`, `R` and `LR`, where `L` and `R` are any arithmetic type
+(\ref{Basic.Types.Arithmetic}), and `LR` is the promoted expression type;
+the ternary operator will be defined of the form:
+
+```
 LR operator?:(bool, L , R );
+```
 
+For all types `T`, a ternary operator will be defined of the form:
+
+```
 operator?:(bool, T , T );
+```
