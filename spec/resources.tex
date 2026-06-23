@@ -37,6 +37,9 @@ The total size of a single contained element must be less than 16 bytes.
 \p Typed buffers perform format conversions on load such that the underlying
 data gets converted to the destination type in an implementation-defined way.
 
+\p The \texttt{Buffer} type's template argument \texttt{T} has a default value
+of \texttt{float4}.
+
 \begin{HLSL}
 template <typename T = float4> requires hlsl::is_vector<T>::value || hlsl::is_arithmetic<T>::value
 class Buffer {
@@ -115,8 +118,8 @@ void GetDimensions(out uint width) const;
 or the subscript operator.
 
 \begin{HLSL}
-T Load(int index) const;
-T operator[](int index) const;
+T Load(uint index) const;
+T operator[](uint index) const;
 \end{HLSL}
 
 \p These each return the element of the buffer's type at the given index
@@ -151,8 +154,8 @@ device T &operator[](int index);
 \end{note}
 
 \p Writes to typed buffer elements overwrite the entire element, even if only
-part of the data is written. The behavior of partial writes is
-implementation-defined.
+part of the data is written. A partial write to a typed buffer is a load of the
+full value, an insert of the partial elements, then a write of the full value.
 
 \Sec{CheckAccessFullyMapped}{Resources.mapcheck}
 
