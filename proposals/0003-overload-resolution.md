@@ -512,9 +512,7 @@ below:
 | Array-to-pointer | Lvalue Transformation | Exact Match | \ref{Conv.array} |
 | Qualification | Qualification Adjustment | Exact Match | \ref{Conv.qual} |
 | Vector Scalar splat (without conversion) | Scalar Extension | Extension | \ref{Conv.vsplat} |
-| Vector Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
 | Matrix Scalar splat (without conversion) | Scalar Extension | Extension | \ref{Conv.msplat} |
-| Matrix Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.msplat} |
 | Integral promotion | Promotion | Promotion | \ref{Conv.iconv} & \ref{Conv.rank.int} |
 | Floating point promotion | Promotion | Promotion | \ref{Conv.fconv} & \ref{Conv.rank.float} |
 | Component-wise promotion | Promotion | Promotion | \ref{Conv.cwise} |
@@ -526,11 +524,13 @@ below:
 | Boolean conversion | Conversion | Conversion | \ref{Conv.bool} |
 | Component-wise conversion | Conversion | Conversion | \ref{Conv.cwise} |
 | Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
+| Vector Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
+| Matrix Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.msplat} |
 | Vector truncation (without conversion) | Dimensionality Reduction | Truncation | \ref{Conv.vtrunc} |
-| Vector truncation promotion | Dimensionality Reduction Promotion | Promotion Truncation | \ref{Conv.vtrunc} |
-| Vector truncation conversion | Dimensionality Reduction Conversion | Conversion Truncation | \ref{Conv.vtrunc} |
 | Matrix truncation (without conversion) | Dimensionality Reduction | Truncation | \ref{Conv.vtrunc} |
+| Vector truncation promotion | Dimensionality Reduction Promotion | Promotion Truncation | \ref{Conv.vtrunc} |
 | Matrix truncation promotion | Dimensionality Reduction Promotion | Promotion Truncation | \ref{Conv.vtrunc} |
+| Vector truncation conversion | Dimensionality Reduction Conversion | Conversion Truncation | \ref{Conv.vtrunc} |
 | Matrix truncation conversion | Dimensionality Reduction Conversion | Conversion Truncation | \ref{Conv.vtrunc} |
 
 If a scalar splat conversion occurs in a conversion sequence where all other
