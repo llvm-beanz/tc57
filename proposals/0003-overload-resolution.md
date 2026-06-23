@@ -523,7 +523,7 @@ below:
 | Integral conversion | Conversion | Conversion | \ref{Conv.iconv} |
 | Floating point conversion | Conversion | Conversion | \ref{Conv.fconv} |
 | Floating-integral conversion | Conversion | Conversion | \ref{Conv.fpint} |
-| Boolean conversion | Convesrion | Conversion | \ref{Conv.bool} |
+| Boolean conversion | Conversion | Conversion | \ref{Conv.bool} |
 | Component-wise conversion | Conversion | Conversion | \ref{Conv.cwise} |
 | Scalar splat conversion | Scalar Extension Conversion | Conversion Extension | \ref{Conv.vsplat} |
 | Vector truncation (without conversion) | Dimensionality Reduction | Truncation | \ref{Conv.vtrunc} |
