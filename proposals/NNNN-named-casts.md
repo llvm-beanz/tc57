@@ -44,7 +44,7 @@ The `hlsl::bit_cast<T>(V)` cast function template will convert the expression
 the expression `V` and the result type `T` must not be intangible types
 (\ref{Basic.Types.Intangible}), and must be of the same size.
 
-The `bit_cast` and `elementwise_cast` templates areput in the hlsl namespace
+The `bit_cast` and `elementwise_cast` templates are put in the hlsl namespace
 aligning with modern C++ conventions to avoid additions to the global namespace.
 Conversely the `static_cast` construct is defined as a global casting operator
 conforming to the historical C++ definition which remains in modern C++.
