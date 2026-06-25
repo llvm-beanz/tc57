@@ -34,3 +34,9 @@ User defined conversion functions will be resovled according to the rules in
 [0003](0003-overload-resolution.md) in explicit cast expressions of the form
 `(T)Obj` and in initialization expressions for built-in types such as `T X =
 Obj` where `T` is a built-in type.
+
+This proposal also will introduce the `explicit` keyword which may only be
+applied to a user-defined conversion function. When a conversion function is
+annotated with the `explicit` keyword the conversion function will be excluded
+from any overload set constructed for implicit conversions, allowing the
+function to only be resolved in explicit cast expressions.
