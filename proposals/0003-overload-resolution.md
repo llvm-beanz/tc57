@@ -9,7 +9,8 @@ params:
 ---
 
 * Dependencies: [#74](https://github.com/hlsl-tc57/tc57/pull/74),
-                [#115](https://github.com/hlsl-tc57/tc57/pull/115)
+                [#115](https://github.com/hlsl-tc57/tc57/pull/115),
+                [#127](https://github.com/hlsl-tc57/tc57/pull/127)
 
 ## Implementation Status
 
