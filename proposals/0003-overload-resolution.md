@@ -18,8 +18,6 @@ params:
 |---|---------|----------|
 | C++-aligned best match | Not Planned | Complete |
 | C++-aligned candidate selection | Not Planned | Complete |
-| User-defined conversion functions | ??? | Complete |
-| `explicit` keyword | ??? | Complete |
 
 ## Introduction
 
