@@ -159,15 +159,13 @@ uint Yeet(); // ill-formed: decls differ only by return type
 ```hlsl
 class Doggo {
   static void pet();
-  void pet();              // ill-formed: static pet has the same parameter-type-list
-  void pet() const;        // ill-formed: static pet has the same parameter-type-list
+  void pet();              // ill-formed: cannot be overloaded with `static void pet()`
 
-  void wagTail();          // valid: no conflicting static declaration.
-  void wagTail() const;    // valid: no conflicting static declaration.
+  static void wagTail();
+  void wagTail();          // valid
 
-  static void bark(Doggo D);
-  void bark();             // valid: static bark parameter-type-list is different
-  void bark() const;       // valid: static bark parameter-type-list is different
+  void bark(int);
+  static void bark(int);   // ill-formed: cannot be overloaded with `void bark(int)`
 };
 ```
 
