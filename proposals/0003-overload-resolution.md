@@ -662,7 +662,7 @@ Postfix unary operators are not overloadable.
 
 ##### Binary Operators
 
-An overloaded binary operator must be implmeneted by a non-static member
+An overloaded binary operator must be implemented by a non-static member
 function with one parameter or a non-member function with two parameters.
 
 ##### Function Call Operator
