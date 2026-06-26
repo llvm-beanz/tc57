@@ -183,13 +183,6 @@ void Entry(int);           // ill-formed: an overload set cannot have more than 
 ```
 
   * An overload set contains more than one function declaration which only
-  differ in parameter declarations of equivalent types.
-```hlsl
-void F(int4 I);
-void F(vector<int, 4> I);  // ill-formed: int4 is a type alias of vector<int, 4>
-```
-
-  * An overload set contains more than one function declaration which only
   differ in `const` parameter specifiers.
 ```hlsl
 void G(int);
