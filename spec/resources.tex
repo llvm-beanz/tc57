@@ -157,7 +157,7 @@ T Load(uint index) const;
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Requires:} \texttt{index} < the number of elements in the
+  \item \textit{Requires:} \texttt{index} \textless the number of elements in the
   typed buffer.
   \item \textit{Returns:} The element in the typed buffer at the index specified
   by \texttt{index}.
@@ -188,7 +188,7 @@ T operator[](uint index) const;
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Requires:} \texttt{index} < the number of elements in the
+  \item \textit{Requires:} \texttt{index} \textless the number of elements in the
   typed buffer.
   \item \textit{Returns:} The element in the typed buffer at the index specified
   by \texttt{index}.
@@ -199,7 +199,7 @@ device T &operator[](int index);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Preconditions:} \texttt{index} < the number of elements in the
+  \item \textit{Preconditions:} \texttt{index} \textless the number of elements in the
   typed buffer.
   \item \textit{Returns:} An lvalue-reference to the element in the typed buffer
   at the index specified by \texttt{index}.
