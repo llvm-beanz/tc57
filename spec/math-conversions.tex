@@ -1,0 +1,171 @@
+\Sec{Conversion Functions}{Math.ConversionFunctions}
+
+\p This subclause lists and describes conversion functions for converting values
+stored in numeric types and vectors of numeric types to other numeric types or
+vectors of such types.
+
+\begin{HLSL}
+template<uint N> vector<double, N> asdouble(vector<uint, N> lowBits, vector<uint, N> highBits);
+
+template<uint N> vector<float, N> asfloat(vector<float, N> input);
+template<uint N> vector<float, N> asfloat(vector<int, N> input);
+template<uint N> vector<float, N> asfloat(vector<uint, N> input);
+
+template<uint N> vector<float16\_t, N> asfloat16(vector<float16\_t, N> input);
+template<uint N> vector<float16\_t, N> asfloat16(vector<int16\_t, N> input);
+template<uint N> vector<float16\_t, N> asfloat16(vector<uint16\_t, N> input);
+
+template<uint N> vector<int16\_t, N> asint16(vector<float16\_t, N> input);
+template<uint N> vector<int16\_t, N> asint16(vector<int16\_t, N> input);
+template<uint N> vector<int16\_t, N> asint16(vector<uint16\_t, N> input);
+
+template<uint N> vector<int, N> asint(vector<float, N> input);
+template<uint N> vector<int, N> asint(vector<int, N> input);
+template<uint N> vector<int, N> asint(vector<uint, N> input);
+
+template<uint N> void asuint(vector<double, N> input, out vector<uint, N> lowBits, out vector<uint, N> highBits);
+
+template<uint N> vector<uint, N> asuint(vector<float, N> input);
+template<uint N> vector<uint, N> asuint(vector<int, N> input);
+template<uint N> vector<uint, N> asuint(vector<uint, N> input);
+
+template<uint N> vector<uint16\_t, N> asuint16(vector<float16\_t, N> input);
+template<uint N> vector<uint16\_t, N> asuint16(vector<int16\_t, N> input);
+template<uint N> vector<uint16\_t, N> asuint16(vector<uint16\_t, N> input);
+
+template<uint N> vector<float, N> f16tof32(vector<uint, N> input);
+
+template<uint N> vector<uint, N> f32tof16(vector<float, N> input);
+\end{HLSL}
+
+\Sub{Other Non-Member Functions}{Math.Functions.Other}
+
+\begin{HLSL}
+template<uint N> vector<double, N> asdouble(vector<uint, N> lowBits, vector<uint, N> highBits);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Requires:} \texttt{uint} scalars or vectors \texttt{lowBits} and
+  \texttt{highBits} must have the same dimensions.
+  \item \textit{Returns:} A scalar or vector of the same dimension as the input
+  vectors, containing 64-bit \texttt{double} values constructed by replicating
+  the bits from each element of \texttt{lowBits} into the low order bits of the
+  corresponding element of the result and the bits from each element of
+  \texttt{highBits} into the high order bits of the corresponding element of the
+  result.
+  \item \textit{Notes:} This function allow shaders to construct \texttt{double}
+  values from integers without requiring 64-bit integer support.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<float, N> asfloat(vector<float, N> input);
+template<uint N> vector<float, N> asfloat(vector<int, N> input);
+template<uint N> vector<float, N> asfloat(vector<uint, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit floating point
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created floating-point scalar or
+  vector return value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<float16\_t, N> asfloat16(vector<float16\_t, N> input);
+template<uint N> vector<float16\_t, N> asfloat16(vector<int16\_t, N> input);
+template<uint N> vector<float16\_t, N> asfloat16(vector<uint16\_t, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 16-bit floating point
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created floating-point scalar or vector return
+  value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<int16\_t, N> asint16(vector<float16\_t, N> input);
+template<uint N> vector<int16\_t, N> asint16(vector<int16\_t, N> input);
+template<uint N> vector<int16\_t, N> asint16(vector<uint16\_t, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 16-bit signed integer
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created integer scalar or vector return value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<int, N> asint(vector<float, N> input);
+template<uint N> vector<int, N> asint(vector<int, N> input);
+template<uint N> vector<int, N> asint(vector<uint, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit signed integer
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created integer scalar or vector return value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> void asuint(vector<double, N> input, out vector<uint, N> lowBits, out vector<uint, N> highBits);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} The scalar or vector \texttt{lowBits} is initialized
+  with the 32 least significant bits of the corresponding element of the
+  \texttt{input} argument replicated.
+  \item \textit{Returns:} The scalar or vector \texttt{highBits} is initialized
+  with the 32 most significant bits of the corresponding element of the
+  \texttt{input} argument replicated.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<uint, N> asuint(vector<float, N> input);
+template<uint N> vector<uint, N> asuint(vector<int, N> input);
+template<uint N> vector<uint, N> asuint(vector<uint, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit unsigned integer
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created unsigned integer scalar or vector return
+  value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<uint16\_t, N> asuint16(vector<float16\_t, N> input);
+template<uint N> vector<uint16\_t, N> asuint16(vector<int16\_t, N> input);
+template<uint N> vector<uint16\_t, N> asuint16(vector<uint16\_t, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit unsigned integer
+  values. Each bit in the object representation of the \texttt{input} argument
+  is replicated into the newly created unsigned integer scalar or vector return
+  value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<float, N> f16tof32(vector<uint, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit floating-point
+  values. The lower 16-bits of the object representation of each element of
+  \texttt{input} is interpreted as a 16-bit floating-point value, and the value
+  is precisely converted to a 32-bit floating-point value.
+\end{itemize}
+
+\begin{HLSL}
+template<uint N> vector<uint, N> f32tof16(vector<float, N> input);
+\end{HLSL}
+
+\begin{itemize}
+  \item \textit{Returns:} A scalar or vector object of 32-bit unsigned integer
+  values. Each element of the \texttt{input} argument is first converted to a
+  16-bit floating-point value with an implementation-defined rounding mode, then
+  the bit pattern of the 16-bit value is replicated into the low bits of the
+  corresponding output 32-bit unsigned integer.
+\end{itemize}
+
