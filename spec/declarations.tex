@@ -70,7 +70,55 @@
 \p If a function is declared with an \texttt{export} specifier then all redeclarations of the same function must also use the \texttt{export} specifier or be part of \textit{export-declaration-group} (\ref{Decl.Export}).
 
 \Sec{Declarators}{Decl.Decl}
-% TODO: Complete the declarators subclause.
+
+\Sec{Declarators}{Decl.Decl}
+
+\begin{grammar}
+  \define{init-declarator-list}\br
+  init-declarator\br
+  init-declarator-list \terminal{,} init-declarator\br
+
+  \define{init-declarator}\br
+  declarator \opt{initializer}\br
+
+  \define{declarator}\br
+  declarator-id \opt{attribute-specifier-seq}\br
+  declarator parameters-and-qualifiers\br
+  declarator \terminal{\lbrack} \opt{constant-expression} \terminal{\rbrack} \opt{attribute-specifier-seq}\br
+
+  \define{parameters-and-qualifiers}\br
+  \terminal{(} parameter-declaration-clause \terminal{)} \opt{cv-qualifier-seq} \opt{attribute-specifier-seq}\br
+
+  \define{cv-qualifier-seq}\br
+  cv-qualifier \opt{cv-qualifier-seq}\br
+
+  \define{cv-qualifier}\br
+  \terminal{const}\br
+
+  \define{declarator-id}\br
+  id-expression
+
+\end{grammar}
+
+\Sub{Arrays}{Decl.Array}
+
+\p In a declaration \texttt{T D} where \texttt{D} has the form:
+
+\begin{innergrammar}
+  \terminal{D1} \terminal{\lbrack} \opt{constant-expression} \terminal{\rbrack} \opt{attribute-specifier-seq}
+\end{innergrammar}
+
+\p The type of the entity declared in a declaration \texttt{T D1} is
+\texttt{T$^\prime$}, the derived type \texttt{T}. The type of the entity
+declared in the declarator \texttt{D} is \texttt{T$^\prime$[N]}. The
+\textit{constant-expression} shall be a converted constant expression of
+unsigned integer type. Its value \texttt{N} specifies the number of elements in
+the array, called the \textit{array bound}.
+
+\p If present, \texttt{N} must be greater than zero. If not present, the
+declaration must be a global declaration of an object of a resource type
+(\ref{Resources}); otherwise the program is ill-formed.
+
 \Sec{Initializers}{Decl.Init}
 
 \p The process of initialization described in this section applies to all
