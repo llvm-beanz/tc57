@@ -136,3 +136,36 @@ multiple of the array's base element type.
 more or fewer elements than the target object's flattened ordering, or if any
 initializer \(I_n\) cannot be implicitly converted to the corresponding element
 \(E_n\)'s type.
+
+\Sec{Constant Buffer Declarations}{Decl.cbuffer}
+
+\begin{grammar}
+  \define{cbuffer-declaration}\br
+  \terminal{cbuffer} name \opt{resource-binding} \terminal{\{}
+    \opt{cbuffer-member-seq} \terminal {\}}\br
+
+  \define{cbuffer-member-seq}\br
+  cbuffer-member-declaration\br
+  cbuffer-member-seq cbuffer-member-declaration\br
+
+  \define{cbuffer-member-declaration}\br
+  block-declaration\br
+  function-definition\br
+  template-declaration\br
+  empty-declaration
+\end{grammar}
+
+\p A \textit{cbuffer declaration} is declared with the \texttt{cbuffer} keyword.
+The name of the cbuffer declaration does not declare a name, and cannot be
+referenced from within the translation unit, nor is it required to be unique.
+Each cbuffer declaration refers to a unique constant buffer resource
+(\ref{Resources.cnbuf}).
+
+\p Declarations within a cbuffer declaration that declare names, declare their
+names in the scope containing the cbuffer declaration. The cbuffer declaration
+itself does not declare a declaration scope. A cbuffer declaration may not
+contain a \textit{namespace-declaration} or \textit{cbuffer-declaration}.
+
+\p Variable declarations with program storage duration in the cbuffer
+declaration are called \textit{shader constants}. Shader constants are implicitly
+const-qualified and cannot be modified in program code.
