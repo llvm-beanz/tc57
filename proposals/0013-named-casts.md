@@ -24,13 +24,13 @@ values from a source type to a destination type with tight validation.
 
 ## Proposed solution
 
-HLSL will introduce three new named cast templates, `hlsl::static_cast<T>`,
+HLSL will introduce three new named cast templates, `static_cast<T>`,
 `hlsl::elementwise_cast<T>` and `hlsl::bit_cast<T>`.
 
 The `hlsl::static_cast<T>(V)` will behave similar to the C++ `static_cast<T>(V)`
 expression, except as changes are required due to other differences between C++
 and HLSL. It will convert the expression `V` to the result type `T`. The main
-difference from C++ is that HLSL's `hlsl::static_cast<T>` will always produce an
+difference from C++ is that HLSL's `tatic_cast<T>` will always produce an
 rvalue since HLSL does not have spellable lvalue reference types, and may not be
 used for polymorphic casts for the same reason.
 
@@ -60,7 +60,9 @@ reduces the scope of `static_cast`.
 
 ### Addition to [Lex.Keywords]
 
-The keyword `static_cast` is added to the grammar of keywords.
+> The keyword `static_cast` is added to the grammar of keywords. Updated
+> rendering below, with addition highlighted.
+![Latex Rendering](0013-assets/KeywordsUpdates.png)
 
 ### Static cast [Expr.StaticCast]
 
@@ -132,10 +134,3 @@ of the `Src` argument is replicated into the cooresponding bit in the value
 representation of the newly created `DestTy` object. Padding bits in the result
 are unspecified. If an object or subobject of the returned value has a bit
 pattern that does not map to a value of that type, the behavior is undefined.
-
-  \item \textit{Effects:} the actions performed by the function.
-  \item \textit{Synchronization:} the requirements for execution or memory
-  synchronization.
-  \item \textit{Returns:} a description of the value returned by the function.
-  \item \textit{Remarks:} additional normative information about the function.
-  \item \textit{Notes:} non-normative information provided about the function.
