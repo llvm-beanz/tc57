@@ -1,35 +1,181 @@
 {{ define "main" }}
 
-  {{ $remaining_pages := (.Pages.ByParam "number") }}
+<style>
+    ul.hlsl-specs-names { list-style: none; margin: 0; padding: 0;  }
+    ul.hlsl-specs-names li { display: inline; }
+    ul.hlsl-specs-names li + li::before { content: ", ";  }
 
-  {{ range slice "Under Consideration" "Refinement" "Accepted" "Completed" "Rejected" "Deferred" }}
-    {{ $status := . }}
+    .proposals-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .proposals-toolbar select { padding: 0.2rem 0.4rem; }
 
-    {{ $pages := $remaining_pages }}
-    {{ $remaining_pages = slice }}
+    table#proposals-table tr[hidden] { display: none; }
+    table#proposals-table th.sortable {
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+    }
+    table#proposals-table th.sortable:hover { background-color: rgba(0, 0, 0, 0.05); }
+    table#proposals-table th .sort-indicator { font-size: 0.75em; margin-left: 0.25em; }
+</style>
 
-    <h2>{{ $status }} </h2>
-    <ul>
-      {{ range $pages }}
-        {{ if eq .Params.status $status }}
-          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-        {{ else }}
-          {{ $remaining_pages = $remaining_pages | append . }}
+<p class="proposals-toolbar">
+    <label for="status-filter">Filter by status:</label>
+    <select id="status-filter">
+        <option value="">All</option>
+        {{ range slice "Under Consideration" "Refinement" "Accepted" "Completed" "Rejected" "Deferred" }}
+        <option value="{{ . }}">{{ . }}</option>
         {{ end }}
-      {{ end }}
-    </ul>
- {{ end }}
+    </select>
+    <span id="proposals-count"></span>
+</p>
 
+<table id="proposals-table" style="width: auto">
+    <thead>
+        <tr>
+            <th class="sortable" data-sort-type="text">Title <span class="sort-indicator"></span></th>
+            <th class="sortable" data-sort-type="text">Status <span class="sort-indicator"></span></th>
+            <th class="sortable" data-sort-type="text">Authors <span class="sort-indicator"></span></th>
+            <th class="sortable" data-sort-type="text">Sponsors <span class="sort-indicator"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range (.Pages.ByTitle) }}
+        <tr>
+            <td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+            <td>{{ .Params.status }}</td>
+            <td>
+                {{ with .Params.authors }}
+                <ul class="hlsl-specs-names">
+                    {{- range . -}}
+                        {{- range $username, $name := . -}}
+                        <li><a href="https://github.com/{{ $username }}">{{- $name -}}</a></li>
+                        {{- end -}}
+                    {{- end -}}
+                </ul>
+                {{ end }}
+            </td>
+            <td>
+                {{ with .Params.sponsors }}
+                <ul class="hlsl-specs-names">
+                    {{- range . -}}
+                        {{- range $username, $name := . -}}
+                        <li><a href="https://github.com/{{ $username }}">{{- $name -}}</a></li>
+                        {{- end -}}
+                    {{- end -}}
+                </ul>
+                {{ end }}
+            </td>
+        </tr>
+        {{ end }}
+    </tbody>
+</table>
 
- {{ if gt ($remaining_pages | len) 0 }}
- <h2>Invalid Metadata</h2>
- <ul>
-  {{range $remaining_pages }}
-  <li>
-    {{ .File.LogicalName }}
-  </li>
-  {{end}}
- </ul>
- {{ end }}
+<script>
+(function () {
+    "use strict";
+
+    var table = document.getElementById("proposals-table");
+    if (!table) {
+        return;
+    }
+
+    var tbody = table.tBodies[0];
+    var filterSelect = document.getElementById("status-filter");
+    var countLabel = document.getElementById("proposals-count");
+    var statusColumn = 1; // <th>Status</th> is the second column
+
+    var sortState = { column: -1, direction: 1 };
+
+    function sortIndicator(cell) {
+        return cell.querySelector(".sort-indicator");
+    }
+
+    function resetIndicators() {
+        var cells = table.tHead.rows[0].cells;
+        for (var i = 0; i < cells.length; i++) {
+            sortIndicator(cells[i]).textContent = "";
+        }
+    }
+
+    function updateIndicators() {
+        resetIndicators();
+        if (sortState.column < 0) {
+            return;
+        }
+        sortIndicator(table.tHead.rows[0].cells[sortState.column]).textContent =
+            sortState.direction === 1 ? "\u25B2" : "\u25BC";
+    }
+
+    function visibleRows() {
+        var rows = Array.prototype.slice.call(tbody.rows);
+        return rows.filter(function (row) {
+            return !row.hidden;
+        });
+    }
+
+    function updateCount() {
+        var total = tbody.rows.length;
+        var shown = visibleRows().length;
+        countLabel.textContent = shown === total
+            ? String(total)
+            : shown + " of " + total;
+    }
+
+    function applyFilter() {
+        var value = filterSelect.value;
+        var rows = Array.prototype.slice.call(tbody.rows);
+        rows.forEach(function (row) {
+            row.hidden = value !== "" && row.cells[statusColumn].textContent.trim() !== value;
+        });
+        updateCount();
+    }
+
+    function sortBy(column) {
+        if (sortState.column === column) {
+            sortState.direction = -sortState.direction;
+        } else {
+            sortState.column = column;
+            sortState.direction = 1;
+        }
+        var direction = sortState.direction;
+        var cells = table.tHead.rows[0].cells[column];
+        var type = cells.getAttribute("data-sort-type");
+
+        visibleRows().sort(function (a, b) {
+            var av = a.cells[column].textContent.trim();
+            var bv = b.cells[column].textContent.trim();
+            var result;
+            if (type === "numeric") {
+                result = parseFloat(av) - parseFloat(bv);
+            } else {
+                result = av.localeCompare(bv, undefined, { numeric: true, sensitivity: "base" });
+            }
+            return result * direction;
+        }).forEach(function (row) {
+            tbody.appendChild(row);
+        });
+
+        updateIndicators();
+    }
+
+    Array.prototype.slice.call(table.tHead.rows[0].cells).forEach(function (cell, index) {
+        if (!cell.classList.contains("sortable")) {
+            return;
+        }
+        cell.addEventListener("click", function () {
+            sortBy(index);
+        });
+    });
+
+    filterSelect.addEventListener("change", applyFilter);
+
+    applyFilter();
+})();
+</script>
 
 {{ end }}
