@@ -1,6 +1,6 @@
 ---
 title: "0003 - Simplified Overload Resolution"
-slug: "0003"
+slug: "0002"
 params:
   authors:
     - llvm-beanz: Chris Bieneman
