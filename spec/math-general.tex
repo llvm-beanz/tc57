@@ -762,7 +762,7 @@ vector<float, N> smoothstep(vector<float, N> min, vector<float, N> max,
 \begin{itemize}
   \item \textit{Returns:} $0$ if \texttt{x} is less than \texttt{min} and $1$ if
   \texttt{x} is greater than \texttt{max}; otherwise an interpolant computed by
-  Hermite interpolation of \texttt{x} between \texttt{min} and \texttt{max}.
+  cubic Hermite interpolation of \texttt{x} between \texttt{min} and \texttt{max}.
 \end{itemize}
 
 \begin{HLSL}
