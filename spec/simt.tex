@@ -2,13 +2,13 @@
 
 \p This clause lists and describes functions provided by the HLSL standard
 library to perform operations utilizing the \acrshort{simt} programming model to
-coordinate across co-executing threads. These operations are called
+coordinate across co-executing \gls{lane}s. These operations are called
 \textit{cooperative} and require execution synchronization.
 
 \p The set of cooperative functions are divided into functions that require
 cooperation of the variable-width \gls{wave} called \textit{wave functions}
 (\ref{SIMT.Wave}), and functions that require cooperation of groupings of four
-adjacent threads called \textit{quad functions} (\ref{SIMT.Quad}).
+adjacent \gls{lane}s called \textit{quad functions} (\ref{SIMT.Quad}).
 
 \p The full semantics of \acrshort{simt} cooperation is detailed in the
 execution model (\ref{Basic.Exec}).
@@ -374,7 +374,7 @@ bool WaveIsFirstLane();
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} \texttt{true} only on the \gls{lane} with the
@@ -386,7 +386,7 @@ uint WaveGetLaneIndex();
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Returns:} the index of the current thread within the \gls{wave}.
+  \item \textit{Returns:} the index of the current \gls{lane} within the \gls{wave}.
 \end{itemize}
 
 \begin{HLSL}
@@ -404,11 +404,11 @@ bool WaveActiveAnyTrue(bool cond);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} returns \texttt{true} if \texttt{cond} is
-  \texttt{true} in any of the co-executing threads in the \gls{tangle};
+  \texttt{true} in any of the co-executing \gls{lane}s in the \gls{tangle};
   \texttt{false} otherwise.
   \item \textit{Remarks:} the return value of this function is uniform across
   the \gls{tangle}.
@@ -419,11 +419,11 @@ bool WaveActiveAllTrue(bool cond);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} returns \texttt{true} if \texttt{cond} is
-  \texttt{true} in all of the co-executing threads in the \gls{tangle};
+  \texttt{true} in all of the co-executing \gls{lane}s in the \gls{tangle};
   \texttt{false} otherwise.
   \item \textit{Remarks:} the return value of this function is uniform across
   the \gls{tangle}.
@@ -453,10 +453,10 @@ template <uint N> vector<uint64_t, N> WaveActiveAllEqual(vector<uint64_t, N> val
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
-  \item \textit{Returns:} returns \texttt{true} if \texttt{value} in all threads
+  \item \textit{Returns:} returns \texttt{true} if \texttt{value} in all \gls{lane}s
   equates to the same value as if \texttt{value\textsubscript{0} ==
   value\textsubscript{1} \&\& value\textsubscript{1} == value\textsubscript{2}
   \&\& ...}; \texttt{false} otherwise.
@@ -469,7 +469,7 @@ vector<uint, 4> WaveActiveBallot(bool cond);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} A 128-bit bitmask stored in a \texttt{vector<uint,
@@ -508,7 +508,7 @@ template <uint N> vector<uint64_t, N> WaveReadLaneAt(vector<uint64_t, N> value, 
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the value of \texttt{value} from the \gls{lane}
@@ -541,7 +541,7 @@ template <uint N> vector<uint64_t, N> WaveReadLaneFirst(vector<uint64_t, N> valu
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the value of \texttt{value} from the lane in the
@@ -555,10 +555,10 @@ uint WaveActiveCountBits(bool value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
-  \item \textit{Returns:} the number of threads in the \gls{tangle} for which
+  \item \textit{Returns:} the number of \gls{lane}s in the \gls{tangle} for which
   \texttt{value} is \texttt{true}.
   \item \textit{Remarks:} the return value of this function is uniform across
   the \gls{tangle}.
@@ -586,7 +586,7 @@ template <uint N> vector<uint64_t, N> WaveActiveSum(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic sum of the \texttt{value} from each
@@ -618,7 +618,7 @@ template <uint N> vector<uint64_t, N> WaveActiveProduct(vector<uint64_t, N> valu
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic product of the \texttt{value} from each
@@ -636,7 +636,7 @@ template <uint N> vector<uint64_t, N> WaveActiveBitAnd(vector<uint64_t, N> value
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} a bitwise and of the \texttt{value} from each
@@ -654,7 +654,7 @@ template <uint N> vector<uint64_t, N> WaveActiveBitOr(vector<uint64_t, N> value)
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} a bitwise or of the \texttt{value} from each
@@ -672,7 +672,7 @@ template <uint N> vector<uint64_t, N> WaveActiveBitXor(vector<uint64_t, N> value
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} a bitwise exclusive or of the \texttt{value} from each
@@ -704,7 +704,7 @@ template <uint N> vector<uint64_t, N> WaveActiveMin(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the minimum value of the \texttt{value} from each
@@ -713,9 +713,9 @@ template <uint N> vector<uint64_t, N> WaveActiveMin(vector<uint64_t, N> value);
   \item \textit{Remarks:} the return value of this function is uniform across
   the \gls{tangle}.
   \item \textit{Remarks:} inactive \gls{lane}s may behave as if an identity
-  value of the minimum representable valid value of the input type is provided;
-  -INF for floating point types, zero for unsigned integer types, and the
-  largest representable negative value for signed integer types.
+  value of the maximum representable valid value of the input type is provided;
+  INF for floating point types, and the largest representable positive value
+  for integer types.
 \end{itemize}
 
 \begin{HLSL}
@@ -740,7 +740,7 @@ template <uint N> vector<uint64_t, N> WaveActiveMax(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the maximum value of the \texttt{value} from each
@@ -749,9 +749,9 @@ template <uint N> vector<uint64_t, N> WaveActiveMax(vector<uint64_t, N> value);
   \item \textit{Remarks:} the return value of this function is uniform across
   the \gls{tangle}.
   \item \textit{Remarks:} inactive \gls{lane}s may behave as if an identity
-  value of the maximum representable valid value of the input type is provided;
-  INF for floating point types, and the largest representable positive value
-  for integer types.
+  value of the minimum representable valid value of the input type is provided;
+  -INF for floating point types, zero for unsigned integer types, and the
+  largest representable negative value for signed integer types.
 \end{itemize}
 
 \begin{HLSL}
@@ -759,11 +759,11 @@ uint WavePrefixCountBits(bool value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the number of \gls{lane}s in the \gls{tangle} with
-  indices less than or equal to the current \gls{lane} where \texttt{value} is
+  indices less than the current \gls{lane} where \texttt{value} is
   \texttt{true}.
 \end{itemize}
 
@@ -789,12 +789,11 @@ template <uint N> vector<uint64_t, N> WavePrefixSum(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic sum of \texttt{value} on all the
-  \gls{lane}s in the \gls{tangle} with indices less than or equal to the current
-  \gls{lane}.
+  \gls{lane}s in the \gls{tangle} with indices less than the current \gls{lane}.
 \end{itemize}
 
 \begin{HLSL}
@@ -819,12 +818,11 @@ template <uint N> vector<uint64_t, N> WavePrefixProduct(vector<uint64_t, N> valu
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic product of \texttt{value} on all the
-  \gls{lane}s in the \gls{tangle} with indices less than or equal to the current
-  \gls{lane}.
+  \gls{lane}s in the \gls{tangle} with indices less than the current \gls{lane}.
 \end{itemize}
 
 \begin{HLSL}
@@ -849,7 +847,7 @@ template <uint N> vector<uint, 4> WaveMatch(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} A 128-bit bitmask stored in a \texttt{vector<uint,
@@ -884,7 +882,7 @@ vector<uint64_t, N> WaveMultiPrefixBitAnd(vector<uint64_t, N> value, vector<uint
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the bitwise and of \texttt{value} on all the
@@ -917,7 +915,7 @@ vector<uint64_t, N> WaveMultiPrefixBitOr(vector<uint64_t, N> value, vector<uint,
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the bitwise or of \texttt{value} on all the
@@ -950,7 +948,7 @@ vector<uint64_t, N> WaveMultiPrefixBitXor(vector<uint64_t, N> value, vector<uint
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the bitwise exclusive or of \texttt{value} on all the
@@ -966,7 +964,7 @@ uint WaveMultiPrefixCountBits(bool value, vector<uint, 4> mask);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the number of \gls{lane}s in the \gls{tangle} for
@@ -1008,7 +1006,7 @@ vector<uint64_t, N> WaveMultiPrefixProduct(vector<uint64_t, N> value, vector<uin
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic product of \texttt{value} on all the
@@ -1050,7 +1048,7 @@ vector<uint64_t, N> WaveMultiPrefixSum(vector<uint64_t, N> value, vector<uint, 4
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the arithmetic sum of \texttt{value} on all the
@@ -1088,8 +1086,8 @@ uint GetGroupWaveCount();
 \p This subclause defines the set of \gls{quad} functions included in the
 HLSL standard library.
 
-\p Co-executing threads within a \gls{wave} are logically subdivided into a quad
-grouping comprised of four threads numbered $0..3$. The indices correspond to a
+\p Co-executing \gls{lane}s within a \gls{wave} are logically subdivided into a quad
+grouping comprised of four \gls{lane}s numbered $0..3$. The indices correspond to a
 logical layout which maps the layout of pixels in a pixel shader as illustrated
 in the table below:
 
@@ -1231,7 +1229,7 @@ vector<uint64_t, N> QuadReadLaneAt(vector<uint64_t, N> value, uint quadLane);
 \begin{itemize}
   \item \textit{Requires:} \texttt{quadLane} must be a value between \texttt{0}
   and \texttt{3}.
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the value of \texttt{value} from the \gls{lane}
@@ -1262,7 +1260,7 @@ template <uint N> vector<uint64_t, N> QuadReadAcrossX(vector<uint64_t, N> value)
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the \texttt{value} from the other \gls{lane} in the
@@ -1293,7 +1291,7 @@ template <uint N> vector<uint64_t, N> QuadReadAcrossY(vector<uint64_t, N> value)
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the \texttt{value} from the other \gls{lane} in the
@@ -1324,7 +1322,7 @@ template <uint N> vector<uint64_t, N> QuadReadAcrossDiagonal(vector<uint64_t, N>
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the \texttt{value} from the other \gls{lane} in the
@@ -1338,7 +1336,7 @@ bool QuadAny(bool cond);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} \texttt{true} if \texttt{cond} is \texttt{true} on any
@@ -1352,7 +1350,7 @@ bool QuadAll(bool cond);
 \end{HLSL}
 
 \begin{itemize}
-  \item \textit{Synchronization:} all co-executing threads within a \gls{tangle}
+  \item \textit{Synchronization:} all co-executing \gls{lane}s within a \gls{tangle}
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} \texttt{true} if \texttt{cond} is \texttt{true} on all
