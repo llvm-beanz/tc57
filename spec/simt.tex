@@ -30,13 +30,70 @@ uint WaveGetLaneCount();
 bool WaveActiveAnyTrue(bool cond);
 bool WaveActiveAllTrue(bool cond);
 
-template <typename T> bool WaveActiveAllEqual(T value);
+float16_t WaveActiveAllEqual(float16_t value);
+float WaveActiveAllEqual(float value);
+double WaveActiveAllEqual(double value);
+bool WaveActiveAllEqual(bool value);
+int16_t WaveActiveAllEqual(int16_t value);
+uint16_t WaveActiveAllEqual(uint16_t value);
+int WaveActiveAllEqual(int value);
+uint WaveActiveAllEqual(uint value);
+int64_t WaveActiveAllEqual(int64_t value);
+uint64_t WaveActiveAllEqual(uint64_t value);
+template <uint N> vector<float16_t, N> WaveActiveAllEqual(vector<float16_t, N> value);
+template <uint N> vector<float, N> WaveActiveAllEqual(vector<float, N> value);
+template <uint N> vector<double, N> WaveActiveAllEqual(vector<double, N> value);
+template <uint N> vector<bool, N> WaveActiveAllEqual(vector<bool, N> value);
+template <uint N> vector<int16_t, N> WaveActiveAllEqual(vector<int16_t, N> value);
+template <uint N> vector<uint16_t, N> WaveActiveAllEqual(vector<uint16_t, N> value);
+template <uint N> vector<int, N> WaveActiveAllEqual(vector<int, N> value);
+template <uint N> vector<uint, N> WaveActiveAllEqual(vector<uint, N> value);
+template <uint N> vector<int64_t, N> WaveActiveAllEqual(vector<int64_t, N> value);
+template <uint N> vector<uint64_t, N> WaveActiveAllEqual(vector<uint64_t, N> value);
 
 vector<uint, 4> WaveActiveBallot(bool cond);
 
-template <typename T> T WaveReadLaneAt(T value, uint lane);
 
-template <typename T> T WaveReadLaneFirst(T value);
+float16_t WaveReadLaneAt(float16_t value, uint lane)
+float WaveReadLaneAt(float value, uint lane)
+double WaveReadLaneAt(double value, uint lane)
+bool WaveReadLaneAt(bool value, uint lane)
+int16_t WaveReadLaneAt(int16_t value, uint lane)
+uint16_t WaveReadLaneAt(uint16_t value, uint lane)
+int WaveReadLaneAt(int value, uint lane)
+uint WaveReadLaneAt(uint value, uint lane)
+int64_t WaveReadLaneAt(int64_t value, uint lane)
+uint64_t WaveReadLaneAt(uint64_t value, uint lane)
+template <uint N> vector<float16_t, N> WaveReadLaneAt(vector<float16_t, N> value, uint lane)
+template <uint N> vector<float, N> WaveReadLaneAt(vector<float, N> value, uint lane)
+template <uint N> vector<double, N> WaveReadLaneAt(vector<double, N> value, uint lane)
+template <uint N> vector<int16_t, N> WaveReadLaneAt(vector<int16_t, N> value, uint lane)
+template <uint N> vector<uint16_t, N> WaveReadLaneAt(vector<uint16_t, N> value, uint lane)
+template <uint N> vector<int, N> WaveReadLaneAt(vector<int, N> value, uint lane)
+template <uint N> vector<uint, N> WaveReadLaneAt(vector<uint, N> value, uint lane)
+template <uint N> vector<int64_t, N> WaveReadLaneAt(vector<int64_t, N> value, uint lane)
+template <uint N> vector<uint64_t, N> WaveReadLaneAt(vector<uint64_t, N> value, uint lane)
+
+float16_t WaveReadLaneFirst(float16_t value);
+float WaveReadLaneFirst(float value);
+double WaveReadLaneFirst(double value);
+bool WaveReadLaneFirst(bool value);
+int16_t WaveReadLaneFirst(int16_t value);
+uint16_t WaveReadLaneFirst(uint16_t value);
+int WaveReadLaneFirst(int value);
+uint WaveReadLaneFirst(uint value);
+int64_t WaveReadLaneFirst(int64_t value);
+uint64_t WaveReadLaneFirst(uint64_t value);
+template <uint N> vector<float16_t, N> WaveReadLaneFirst(vector<float16_t, N> value);
+template <uint N> vector<float, N> WaveReadLaneFirst(vector<float, N> value);
+template <uint N> vector<double, N> WaveReadLaneFirst(vector<double, N> value);
+template <uint N> vector<bool, N> WaveReadLaneFirst(vector<bool, N> value);
+template <uint N> vector<int16_t, N> WaveReadLaneFirst(vector<int16_t, N> value);
+template <uint N> vector<uint16_t, N> WaveReadLaneFirst(vector<uint16_t, N> value);
+template <uint N> vector<int, N> WaveReadLaneFirst(vector<int, N> value);
+template <uint N> vector<uint, N> WaveReadLaneFirst(vector<uint, N> value);
+template <uint N> vector<int64_t, N> WaveReadLaneFirst(vector<int64_t, N> value);
+template <uint N> vector<uint64_t, N> WaveReadLaneFirst(vector<uint64_t, N> value);
 
 uint WaveActiveCountBits(bool value);
 
@@ -373,7 +430,26 @@ bool WaveActiveAllTrue(bool cond);
 \end{itemize}
 
 \begin{HLSL}
-template <typename T> bool WaveActiveAllEqual(T value);
+float16_t WaveActiveAllEqual(float16_t value);
+float WaveActiveAllEqual(float value);
+double WaveActiveAllEqual(double value);
+bool WaveActiveAllEqual(bool value);
+int16_t WaveActiveAllEqual(int16_t value);
+uint16_t WaveActiveAllEqual(uint16_t value);
+int WaveActiveAllEqual(int value);
+uint WaveActiveAllEqual(uint value);
+int64_t WaveActiveAllEqual(int64_t value);
+uint64_t WaveActiveAllEqual(uint64_t value);
+template <uint N> vector<float16_t, N> WaveActiveAllEqual(vector<float16_t, N> value);
+template <uint N> vector<float, N> WaveActiveAllEqual(vector<float, N> value);
+template <uint N> vector<double, N> WaveActiveAllEqual(vector<double, N> value);
+template <uint N> vector<bool, N> WaveActiveAllEqual(vector<bool, N> value);
+template <uint N> vector<int16_t, N> WaveActiveAllEqual(vector<int16_t, N> value);
+template <uint N> vector<uint16_t, N> WaveActiveAllEqual(vector<uint16_t, N> value);
+template <uint N> vector<int, N> WaveActiveAllEqual(vector<int, N> value);
+template <uint N> vector<uint, N> WaveActiveAllEqual(vector<uint, N> value);
+template <uint N> vector<int64_t, N> WaveActiveAllEqual(vector<int64_t, N> value);
+template <uint N> vector<uint64_t, N> WaveActiveAllEqual(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
@@ -410,7 +486,25 @@ vector<uint, 4> WaveActiveBallot(bool cond);
 \end{itemize}
 
 \begin{HLSL}
-template <typename T> T WaveReadLaneAt(T value, uint lane);
+float16_t WaveReadLaneAt(float16_t value, uint lane)
+float WaveReadLaneAt(float value, uint lane)
+double WaveReadLaneAt(double value, uint lane)
+bool WaveReadLaneAt(bool value, uint lane)
+int16_t WaveReadLaneAt(int16_t value, uint lane)
+uint16_t WaveReadLaneAt(uint16_t value, uint lane)
+int WaveReadLaneAt(int value, uint lane)
+uint WaveReadLaneAt(uint value, uint lane)
+int64_t WaveReadLaneAt(int64_t value, uint lane)
+uint64_t WaveReadLaneAt(uint64_t value, uint lane)
+template <uint N> vector<float16_t, N> WaveReadLaneAt(vector<float16_t, N> value, uint lane)
+template <uint N> vector<float, N> WaveReadLaneAt(vector<float, N> value, uint lane)
+template <uint N> vector<double, N> WaveReadLaneAt(vector<double, N> value, uint lane)
+template <uint N> vector<int16_t, N> WaveReadLaneAt(vector<int16_t, N> value, uint lane)
+template <uint N> vector<uint16_t, N> WaveReadLaneAt(vector<uint16_t, N> value, uint lane)
+template <uint N> vector<int, N> WaveReadLaneAt(vector<int, N> value, uint lane)
+template <uint N> vector<uint, N> WaveReadLaneAt(vector<uint, N> value, uint lane)
+template <uint N> vector<int64_t, N> WaveReadLaneAt(vector<int64_t, N> value, uint lane)
+template <uint N> vector<uint64_t, N> WaveReadLaneAt(vector<uint64_t, N> value, uint lane)
 \end{HLSL}
 
 \begin{itemize}
@@ -424,7 +518,26 @@ template <typename T> T WaveReadLaneAt(T value, uint lane);
 \end{itemize}
 
 \begin{HLSL}
-template <typename T> T WaveReadLaneFirst(T value);
+float16_t WaveReadLaneFirst(float16_t value);
+float WaveReadLaneFirst(float value);
+double WaveReadLaneFirst(double value);
+bool WaveReadLaneFirst(bool value);
+int16_t WaveReadLaneFirst(int16_t value);
+uint16_t WaveReadLaneFirst(uint16_t value);
+int WaveReadLaneFirst(int value);
+uint WaveReadLaneFirst(uint value);
+int64_t WaveReadLaneFirst(int64_t value);
+uint64_t WaveReadLaneFirst(uint64_t value);
+template <uint N> vector<float16_t, N> WaveReadLaneFirst(vector<float16_t, N> value);
+template <uint N> vector<float, N> WaveReadLaneFirst(vector<float, N> value);
+template <uint N> vector<double, N> WaveReadLaneFirst(vector<double, N> value);
+template <uint N> vector<bool, N> WaveReadLaneFirst(vector<bool, N> value);
+template <uint N> vector<int16_t, N> WaveReadLaneFirst(vector<int16_t, N> value);
+template <uint N> vector<uint16_t, N> WaveReadLaneFirst(vector<uint16_t, N> value);
+template <uint N> vector<int, N> WaveReadLaneFirst(vector<int, N> value);
+template <uint N> vector<uint, N> WaveReadLaneFirst(vector<uint, N> value);
+template <uint N> vector<int64_t, N> WaveReadLaneFirst(vector<int64_t, N> value);
+template <uint N> vector<uint64_t, N> WaveReadLaneFirst(vector<uint64_t, N> value);
 \end{HLSL}
 
 \begin{itemize}
@@ -857,7 +970,7 @@ uint WaveMultiPrefixCountBits(bool value, vector<uint, 4> mask);
   must complete evaluation of all preceding expressions and sub-expressions
   prior to evaluating this function.
   \item \textit{Returns:} the number of \gls{lane}s in the \gls{tangle} for
-  which tthe corresponding \texttt{mask} bit is \texttt{1} and \texttt{value} is
+  which the corresponding \texttt{mask} bit is \texttt{1} and \texttt{value} is
   \texttt{true}.
   \item \textit{Remarks:} each \gls{lane} may only participate in one grouping
   as defined by the \texttt{mask}, if a \gls{lane} is masked on in more than one
@@ -1124,7 +1237,7 @@ vector<uint64_t, N> QuadReadLaneAt(vector<uint64_t, N> value, uint quadLane);
   \item \textit{Returns:} the value of \texttt{value} from the \gls{lane}
   specified by \texttt{quadLane}.
   \item \textit{Remarks:} the return value of this function is uniform across
-  the \gls{quad}.
+  the \gls{quad} if \texttt{quadLane} is uniform.
 \end{itemize}
 
 \begin{HLSL}
